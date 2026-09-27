@@ -1,9 +1,5 @@
 # ⚡ Charge Fácil — Front-end
 
-Interface web (SPA) da **Charge Fácil**, uma rede de estações de aluguel de power banks.
-A aplicação reúne a **central de gestão da rede** (painel, estações e inventário) e um **simulador do app de
-autoatendimento instalado no totem**, onde o cliente aluga e devolve o power bank sem atendente.
-
 Projeto desenvolvido como MVP da disciplina **Desenvolvimento Full Stack Básico** (PUC-Rio).
 Este front consome a API do repositório https://github.com/aferreira20/charge-facil-api
 
@@ -11,7 +7,7 @@ Apresentação geral do projeto: https://github.com/aferreira20/MVP_AFN-Full-Sta
 
 ---
 
-## ✨ Funcionalidades
+## 1 - Funcionalidades
 
 - **Painel**:
   - indicadores da rede (prontos, aluguéis em andamento, receita, vendidos e estornos);
@@ -32,13 +28,13 @@ Apresentação geral do projeto: https://github.com/aferreira20/MVP_AFN-Full-Sta
 - **Monitor de API** (botão `API` no canto inferior direito): mostra cada chamada feita à API (método, rota, status e horário), para deixar claro qual rota é usada em cada interação.
 - **Layout responsivo**: no celular, a navegação vai para uma barra inferior.
 
-## 🛠️ Tecnologias
+## 2 - Tecnologias
 
 - **HTML5, CSS3 e JavaScript puro**, sem frameworks de SPA e sem bibliotecas de CSS.
 - Scripts clássicos (`<script src>`, sem ES modules), para que o `index.html` funcione aberto direto do disco.
 - `fetch` para consumir a API REST.
 
-## 🚀 Como executar
+## 3 - Como executar
 
 1. **Suba a API primeiro.** Siga o README do repositório https://github.com/aferreira20/charge-facil-api; ela deve responder em `http://127.0.0.1:5000`.
 
