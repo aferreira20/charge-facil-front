@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charge Fácil · Central da Rede</title>
+  <link rel="icon" href="img/icone.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,400;0,600;0,800;1,700;1,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app">
+    <!-- Menu lateral (vira barra inferior no celular) -->
+    <aside class="sidebar">
+      <div class="brand">
+        <img src="img/icone.png" alt="" class="brand-icon">
+        <div class="brand-text">
+          <strong>CHARGE</strong><span>FÁCIL</span>
+        </div>
+      </div>
+      <nav class="nav" aria-label="Seções">
+        <button class="nav-item ativo" data-view="painel"><span class="nav-ico">◉</span><span>Painel</span></button>
+        <button class="nav-item" data-view="estacoes"><span class="nav-ico">▦</span><span>Estações</span></button>
+        <button class="nav-item" data-view="inventario"><span class="nav-ico">▮</span><span>Inventário</span></button>
+        <button class="nav-item" data-view="totem"><span class="nav-ico">⚡</span><span>Totem</span></button>
+      </nav>
+      <div class="sidebar-foot">
+        <div class="api-status" id="api-status"><span class="dot"></span><span class="txt">Conectando…</span></div>
+        <small class="tagline">Energia <em>sempre</em> com você!</small>
+      </div>
+    </aside>
+
+    <main class="main">
+      <!-- ============ PAINEL ============ -->
+      <section class="view ativa" id="view-painel">
+        <header class="view-head">
+          <div>
+            <p class="eyebrow">Central da rede</p>
+            <h1>Painel</h1>
+          </div>
+          <button class="btn btn-ghost" id="btn-atualizar-painel">↻ Atualizar</button>
+        </header>
+
+        <div class="kpis" id="kpis"></div>
+
+        <div class="grid-painel">
+          <article class="card card-ocupacao">
+            <h2>Ocupação da rede</h2>
+            <div class="ring-wrap" id="ring-ocupacao"></div>
+            <ul class="legenda" id="legenda-frota"></ul>
+          </article>
+
+          <article class="card">
+            <h2>Estações mais usadas</h2>
+            <ol class="ranking" id="ranking"></ol>
+          </article>
+
+          <article class="card card-tarifa">
+            <h2>Tarifa e franquia</h2>
+            <ul class="tarifa" id="tarifa"></ul>
+          </article>
+
+          <article class="card card-andamento">
+            <div class="card-head">
+              <h2>Aluguéis em andamento</h2>
+              <span class="nota-inline">prazo de devolução: 24h</span>
+            </div>
+            <ul class="lista-mini" id="andamento"></ul>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ ESTAÇÕES ============ -->
+      <section class="view" id="view-estacoes">
+        <header class="view-head">
+          <div>
+            <p class="eyebrow">Totens da rede</p>
+            <h1>Estações</h1>
+          </div>
+          <button class="btn btn-primary" id="btn-nova-estacao">+ Nova estação</button>
+        </header>
+
+        <div class="toolbar">
+          <input type="search" id="busca-estacao" class="input" placeholder="Buscar por nome, bairro ou cidade…">
+          <label class="switch">
+            <input type="checkbox" id="apenas-ativas">
+            <span class="slider"></span> Só ativas
+          </label>
+        </div>
+
+        <div class="cards-estacoes" id="lista-estacoes"></div>
+      </section>
+
+      <!-- ============ TOTEM (simulador do app de autoatendimento) ============ -->
+      <section class="view" id="view-totem">
+        <div class="kiosk">
+          <div class="kiosk-painel">
+            <div class="kiosk-topo">
+              <p class="eyebrow">App do totem · autoatendimento</p>
+              <div class="tabs" id="modo-totem" role="tablist">
+                <button class="tab ativo" data-modo="alugar">⚡ Alugar</button>
+                <button class="tab" data-modo="devolver">↩ Devolver</button>
+              </div>
+            </div>
+            <h1 class="kiosk-titulo" id="kiosk-titulo">Alugue um <span>power bank</span></h1>
+
+            <ol class="passos" id="passos"></ol>
+
+            <!-- Alugar · passo 1: estação -->
+            <div class="etapa ativa" id="etapa-a1">
+              <p class="ajuda">Escolha a estação onde você está:</p>
+              <div class="lista-escolha" id="alugar-estacoes"></div>
+            </div>
+
+            <!-- Alugar · passo 2: dados do cliente e aviso da franquia -->
+            <form class="etapa form" id="etapa-a2" novalidate>
+              <p class="ajuda">Retirada em <strong id="alugar-estacao-nome">—</strong></p>
+              <label>Nome completo
+                <input class="input" name="cliente_nome" required minlength="3" maxlength="80" placeholder="Maria Oliveira">
+              </label>
+              <label>Celular
+                <input class="input telefone" name="cliente_telefone" required minlength="8" maxlength="20" placeholder="(21) 99999-0000" inputmode="tel">
+              </label>
+              <div class="aviso-caucao" id="aviso-caucao"></div>
+              <label class="check">
+                <input type="checkbox" name="aceite" required>
+                Li e aceito a pré-autorização da franquia
+              </label>
+              <div class="acoes">
+                <button type="button" class="btn btn-ghost" data-etapa="a1">← Voltar</button>
+                <button type="submit" class="btn btn-primary">⚡ Liberar power bank</button>
+              </div>
+            </form>
+
+            <!-- Alugar · passo 3: power bank liberado -->
+            <div class="etapa" id="etapa-a3">
+              <div class="liberado">
+                <div class="bateria-anim"><span></span></div>
+                <p class="eyebrow">Slot liberado!</p>
+                <h2 id="liberado-codigo">CF-0000</h2>
+                <p id="liberado-info"></p>
+                <p class="nota" id="liberado-prazo"></p>
+                <div class="acoes">
+                  <button class="btn btn-primary" data-reiniciar>Concluir</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Devolver · passo 1: estação onde o cliente está -->
+            <div class="etapa" id="etapa-d1">
+              <p class="ajuda">Em qual estação você está devolvendo?</p>
+              <div class="lista-escolha" id="devolver-estacoes"></div>
+            </div>
+
+            <!-- Devolver · passo 2: busca do aluguel pelo celular -->
+            <div class="etapa" id="etapa-d2">
+              <p class="ajuda">Devolução em <strong id="devolver-estacao-nome">—</strong></p>
+              <form class="form busca-tel" id="form-busca-aluguel" novalidate>
+                <label>Celular usado no aluguel
+                  <input class="input telefone" name="telefone" required minlength="8" maxlength="20" placeholder="(21) 99999-0000" inputmode="tel">
+                </label>
+                <button type="submit" class="btn btn-primary">Buscar</button>
+              </form>
+              <div class="lista-escolha" id="devolver-alugueis"></div>
+              <div class="acoes">
+                <button type="button" class="btn btn-ghost" data-etapa="d1">← Voltar</button>
+              </div>
+            </div>
+
+            <!-- Devolver · passo 3: recibo com estorno -->
+            <div class="etapa" id="etapa-d3">
+              <div class="recibo" id="recibo-devolucao"></div>
+              <div class="acoes"><button class="btn btn-primary" data-reiniciar>Concluir</button></div>
+            </div>
+          </div>
+          <div class="kiosk-arte" aria-hidden="true">
+            <img src="img/totem.png" alt="">
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ INVENTÁRIO ============ -->
+      <section class="view" id="view-inventario">
+        <header class="view-head">
+          <div>
+            <p class="eyebrow">Power banks</p>
+            <h1>Inventário</h1>
+          </div>
+          <div class="head-acoes">
+            <button class="btn btn-primary" id="btn-novo-powerbank">+ Adicionar power bank</button>
+            <div class="tabs" id="abas-inventario" role="tablist">
+              <button class="tab ativo" data-aba="operacao">Em operação</button>
+              <button class="tab" data-aba="vendidos">Vendidos</button>
+            </div>
+          </div>
+        </header>
+
+        <!-- Frota em operação -->
+        <div class="aba ativa" id="aba-operacao">
+          <div class="toolbar">
+            <input type="search" id="busca-codigo" class="input" placeholder="Buscar código (ex.: CF-0012)…">
+            <select id="filtro-estacao" class="input"><option value="">Todas as estações</option></select>
+            <select id="filtro-status" class="input">
+              <option value="">Todos os status</option>
+              <option value="em estoque">Em estoque</option>
+              <option value="disponível">Disponível</option>
+              <option value="alugado">Alugado</option>
+              <option value="manutenção">Manutenção</option>
+            </select>
+            <span class="contador" id="contador-operacao"></span>
+          </div>
+          <div class="grade-frota" id="lista-operacao"></div>
+        </div>
+
+        <!-- Power banks vendidos (não devolvidos em 24h) -->
+        <div class="aba" id="aba-vendidos">
+          <div class="toolbar">
+            <input type="search" id="busca-vendidos" class="input" placeholder="Buscar por código, comprador ou telefone…">
+            <span class="contador" id="contador-vendidos"></span>
+          </div>
+          <p class="nota nota-vendidos">Power banks não devolvidos em até 24h: a franquia foi cobrada e o equipamento passou a ser do cliente.</p>
+          <div class="grade-frota" id="lista-vendidos"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Modal genérico (conteúdo inserido via JavaScript) -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-fundo" data-fechar></div>
+    <div class="modal-caixa" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+      <header class="modal-head">
+        <h2 id="modal-titulo"></h2>
+        <button class="btn-fechar" data-fechar aria-label="Fechar">×</button>
+      </header>
+      <div class="modal-corpo" id="modal-corpo"></div>
+    </div>
+  </div>
+
+  <!-- Monitor de API: mostra qual rota cada interação chama -->
+  <div class="monitor" id="monitor">
+    <button class="monitor-toggle" id="monitor-toggle">API <span id="monitor-count">0</span></button>
+    <div class="monitor-corpo">
+      <header>Chamadas à API <button class="link" id="monitor-limpar">limpar</button></header>
+      <ul id="monitor-lista"></ul>
+    </div>
+  </div>
+
+  <div class="toasts" id="toasts" aria-live="polite"></div>
+
+  <!-- Scripts comuns (sem ES modules) para o index.html funcionar aberto direto do disco -->
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/painel.js"></script>
+  <script src="js/estacoes.js"></script>
+  <script src="js/totem.js"></script>
+  <script src="js/inventario.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
